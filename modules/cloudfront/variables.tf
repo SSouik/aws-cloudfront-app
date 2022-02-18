@@ -9,9 +9,20 @@ variable "app_name" {
   description = "The name of the application"
 }
 
+# S3 Bucket variables
 variable "s3_domain_name" {
   type        = string
   description = "The region domain name of the S3 bucket"
+}
+
+variable "s3_bucket_id" {
+  type        = string
+  description = "The ID of the S# bucket"
+}
+
+variable "s3_bucket" {
+  type        = string
+  description = "The bucket name of the S3 bucket"
 }
 
 variable "domain_name" {
