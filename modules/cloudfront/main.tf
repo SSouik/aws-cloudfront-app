@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "app_distribution" {
 
   aliases             = [var.domain_name]
   enabled             = true
-  is_ipv6_enabled     = true
+  is_ipv6_enabled     = false
   default_root_object = var.root_object
 
   custom_error_response {

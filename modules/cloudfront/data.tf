@@ -5,3 +5,7 @@ data "aws_acm_certificate" "app_certificate" {
   types       = ["AMAZON_ISSUED"]
   most_recent = true
 }
+
+data "aws_route53_zone" "selected" {
+  zone_id = var.route53_zone_id
+}
