@@ -1,0 +1,19 @@
+name: Pull Request Version Check
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    paths-ignore:
+      - 'README.md'
+      - 'bin/**'
+      - '.gitignore'
+      - '.github/**'
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check Version
+        run: |
+          ./bin/version_check.sh
