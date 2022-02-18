@@ -1,10 +1,3 @@
-# General Variables
-variable "region" {
-  type        = string
-  description = "Qualifying AWS region (Example: us-east-2)"
-  default     = "us-east-1"
-}
-
 variable "env" {
   type        = string
   description = "Environment of the Infrastructure"
@@ -16,7 +9,11 @@ variable "app_name" {
   description = "The name of the application"
 }
 
-# App Variables
+variable "s3_domain_name" {
+  type        = string
+  description = "The region domain name of the S3 bucket"
+}
+
 variable "domain_name" {
   type        = string
   description = "The domain name that the app will use"
@@ -28,16 +25,9 @@ variable "root_object" {
   default     = "index.html"
 }
 
-variable "index_document" {
+variable "origin_request_arn" {
   type        = string
-  description = "The path to the index file"
-  default     = "index.html"
-}
-
-variable "error_document" {
-  type        = string
-  description = "The path to the error document"
-  default     = "index.html"
+  description = "The ARN of the Lambda@Edge origin request"
 }
 
 variable "acm_certificate_domain" {
