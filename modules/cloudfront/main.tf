@@ -20,10 +20,15 @@ resource "aws_cloudfront_distribution" "app_distribution" {
   is_ipv6_enabled     = false
   default_root_object = var.root_object
 
-  custom_error_response {
-    error_code         = 404
-    response_code      = 404
-    response_page_path = "/404"
+  dynamic "custom_error_response" {
+    for_each = var.custom_responses
+    iterator = custom_response
+
+    content {
+      error_code         = custom_response.value.error_code
+      response_code      = custom_response.value.response_code
+      response_page_path = custom_response.value.response_page_path
+    }
   }
 
   default_cache_behavior {
