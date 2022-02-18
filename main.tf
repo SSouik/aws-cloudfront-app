@@ -20,6 +20,8 @@ module "cloudfront" {
   app_name               = var.app_name
   env                    = var.env
   s3_domain_name         = module.s3.app_bucket_domain_name
+  s3_bucket_id           = module.s3.app_bucket_id
+  s3_bucket              = module.s3.app_bucket
   domain_name            = var.domain_name
   root_object            = var.root_object
   origin_request_arn     = module.lambda_edge.origin_request_arn
