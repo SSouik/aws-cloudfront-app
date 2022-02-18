@@ -2,7 +2,7 @@ exports.handler = (event, context, callback) => {
     const request = event.Records[0].cf.request;
 
     const logObj = {
-        host: request.headers?.host.value,
+        host: request.headers?.host[0].value,
         path: request.uri,
         method: request.method,
         querystring: request.querystring,
