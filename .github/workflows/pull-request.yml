@@ -4,11 +4,6 @@ on:
   pull_request:
     branches:
       - 'main'
-    paths-ignore:
-      - 'README.md'
-      - 'bin/**'
-      - '.gitignore'
-      - '.github/**'
 jobs:
   validate:
     runs-on: ubuntu-latest
