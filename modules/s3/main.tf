@@ -10,6 +10,7 @@ resource "aws_s3_bucket" "app_bucket" {
   force_destroy = true # Tells Terraform to destroy the bucket even if is not empty
 
   tags = {
+    AppName     = var.app_name
     Name        = var.bucket_name
     Environment = var.env
     ManagedBy   = "Terraform"

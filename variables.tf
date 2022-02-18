@@ -13,6 +13,11 @@ variable "env" {
 
 # App Variables
 
+variable "app_name" {
+  type        = string
+  description = "The name of the application"
+}
+
 variable "domain_name" {
   type        = string
   description = "The domain name that the app will use"
