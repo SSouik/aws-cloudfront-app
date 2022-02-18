@@ -1,0 +1,19 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - 'README.md'
+      - 'bin/**'
+      - '.gitignore'
+      - '.github/**'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create release
+        run: |
+          ./bin/release.sh ${{ secrets.GITHUB_TOKEN }}
