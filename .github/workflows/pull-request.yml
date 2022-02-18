@@ -1,0 +1,36 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    paths-ignore:
+      - 'README.md'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the source code
+        uses: actions/checkout@v2
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.8
+      - name: Initialize Terraform modules
+        run: terraform init
+      - name: Validate the Terraform
+        run: terraform validate
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the source code
+        uses: actions/checkout@v2
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.8
+      - name: Initialize Terraform modules
+        run: terraform init
+      - name: Check the Terraform format
+        run: terraform fmt -recursive -check
