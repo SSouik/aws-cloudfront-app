@@ -40,6 +40,12 @@ variable "error_document" {
   default     = "index.html"
 }
 
+# Route 53
+variable "route53_zone_id" {
+  type        = string
+  description = "Hosted zone ID of the desired Route53 record"
+}
+
 variable "acm_certificate_domain" {
   type        = string
   description = "The domain name that the desired ACM certificate covers (Example: *.example.com)"

@@ -25,5 +25,6 @@ module "cloudfront" {
   domain_name            = var.domain_name
   root_object            = var.root_object
   origin_request_arn     = module.lambda_edge.origin_request_arn
+  route53_zone_id        = var.route53_zone_id
   acm_certificate_domain = var.acm_certificate_domain
 }
