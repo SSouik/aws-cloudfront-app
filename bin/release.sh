@@ -1,5 +1,5 @@
 # Get the current version of the Package
-version=$(grep '"version":' version.json | cut -d\" -f4 | sed 's/[.]//g')
+version=$(grep '"version":' version.json | cut -d\" -f4)
 
 echo "Creating release for v${version}"
 token=$1
