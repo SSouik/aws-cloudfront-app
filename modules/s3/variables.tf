@@ -1,6 +1,6 @@
 variable "app_name" {
-    type = string
-    description = "The name of the application"
+  type        = string
+  description = "The name of the application"
 }
 
 variable "bucket_name" {
