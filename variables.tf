@@ -40,6 +40,32 @@ variable "error_document" {
   default     = "index.html"
 }
 
+variable "cloudfront_responses" {
+  type = list(object({
+    error_code         = number
+    response_code      = number
+    response_page_path = string
+  }))
+
+  default = [
+    {
+      error_code         = 404
+      response_code      = 404
+      response_page_path = "404.html"
+    },
+    {
+      error_code         = 403
+      response_code      = 403
+      response_page_path = "403.html"
+    },
+    {
+      error_code         = 500
+      response_code      = 500
+      response_page_path = "500.html"
+    }
+  ]
+}
+
 # Route 53
 variable "route53_zone_id" {
   type        = string
