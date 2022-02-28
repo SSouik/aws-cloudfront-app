@@ -21,11 +21,12 @@ This terraform module creates resources that can host an app using AWS Cloudfron
 |`index_document`|string|`index.html`|The path to the index file|
 |`error_document`|string|`index.html`|The path to the error document|
 |`cloudfront_responses`|list(object([cloudfront_response](#cloudfront_response)))|[cloudfront_response_default](#cloudfront_response_default)|List of custom Cloudfront responses|
-|`route53_zone_id`|string|`null`|Hosted zone ID of the desired Route53 record|
-|`acm_certificate_domain`|string|`null`|The domain name that the desired ACM certificate covers (Example: *.example.com)|
+|`use_acm_certificate`|bool|`true`|Set to `true` to use ACM certificate and `false` to skip and use default cloudfront URL|
+|`route53_zone_id`|string|`""`|Hosted zone ID of the desired Route53 record|
+|`acm_certificate_domain`|string|`""`|The domain name that the desired ACM certificate covers (Example: *.example.com)|
 
 #### cloudfront_response
-```json
+```
 {
     error_code         = number
     response_code      = number
@@ -34,7 +35,7 @@ This terraform module creates resources that can host an app using AWS Cloudfron
 ```
 
 #### cloudfront_response_default
-```json
+```
 [
     {
       error_code         = 404
