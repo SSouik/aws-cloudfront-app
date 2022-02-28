@@ -68,12 +68,20 @@ variable "custom_responses" {
 }
 
 # Route 53
+variable "use_acm_certificate" {
+  type        = bool
+  description = "Set to true if you want to use an existing ACM certificate. False to skip that step and only use the default cloudfront URL"
+  default     = true
+}
+
 variable "route53_zone_id" {
   type        = string
   description = "Hosted zone ID of the desired Route53 record"
+  default     = ""
 }
 
 variable "acm_certificate_domain" {
   type        = string
   description = "The domain name that the desired ACM certificate covers (Example: *.example.com)"
+  default     = ""
 }

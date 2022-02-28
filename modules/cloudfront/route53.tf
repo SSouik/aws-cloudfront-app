@@ -1,5 +1,6 @@
 resource "aws_route53_record" "alias" {
-  zone_id = data.aws_route53_zone.selected.zone_id
+  count   = var.use_acm_certificate ? 1 : 0
+  zone_id = data.aws_route53_zone.selected[0].zone_id
   name    = var.domain_name
   type    = "A"
 
