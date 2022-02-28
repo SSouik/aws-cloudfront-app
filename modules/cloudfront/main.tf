@@ -15,7 +15,7 @@ resource "aws_cloudfront_distribution" "app_distribution" {
     }
   }
 
-  aliases             = [var.domain_name]
+  aliases             = var.use_acm_certificate ? [var.domain_name] : []
   enabled             = true
   is_ipv6_enabled     = false
   default_root_object = var.root_object
@@ -76,8 +76,9 @@ resource "aws_cloudfront_distribution" "app_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = data.aws_acm_certificate.app_certificate.arn
-    ssl_support_method  = "sni-only"
+    cloudfront_default_certificate = !var.use_acm_certificate
+    acm_certificate_arn            = var.use_acm_certificate ? data.aws_acm_certificate.app_certificate[0].arn : ""
+    ssl_support_method             = "sni-only"
   }
 
   lifecycle {

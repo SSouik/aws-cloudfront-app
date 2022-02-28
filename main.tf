@@ -26,6 +26,7 @@ module "cloudfront" {
   root_object            = var.root_object
   custom_responses       = var.cloudfront_responses
   origin_request_arn     = module.lambda_edge.origin_request_arn
+  use_acm_certificate    = var.use_acm_certificate
   route53_zone_id        = var.route53_zone_id
   acm_certificate_domain = var.acm_certificate_domain
 }
