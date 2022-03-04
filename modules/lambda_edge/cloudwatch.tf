@@ -1,5 +1,5 @@
 locals {
-  lambda_group = "/aws/lambda/us-east-1.${var.env}-${var.app_name}-origin-request"
+  lambda_group = "/aws/lambda/${var.env}-${var.app_name}-origin-request"
 }
 
 # Log Group for Lambdas
