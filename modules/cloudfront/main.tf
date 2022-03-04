@@ -7,6 +7,8 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 }
 
 resource "aws_cloudfront_distribution" "app_distribution" {
+  comment = "Cloudfront Distribution for ${var.env}-${var.app_name}"
+
   origin {
     domain_name = var.s3_domain_name
     origin_id   = local.origin_id
