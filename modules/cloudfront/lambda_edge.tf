@@ -1,5 +1,5 @@
 locals {
-  function_name = "${var.env}-${var.app_name}-origin-request"
+  function_name = "${var.env}-${var.app_name}-default-origin-request"
 }
 
 resource "aws_lambda_function" "origin_request" {

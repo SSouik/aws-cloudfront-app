@@ -36,11 +36,6 @@ variable "root_object" {
   default     = "index.html"
 }
 
-variable "origin_request_arn" {
-  type        = string
-  description = "The ARN of the Lambda@Edge origin request"
-}
-
 variable "custom_responses" {
   type = list(object({
     error_code         = number
@@ -84,4 +79,11 @@ variable "acm_certificate_domain" {
   type        = string
   description = "The domain name that the desired ACM certificate covers (Example: *.example.com)"
   default     = ""
+}
+
+# Lambda
+variable "use_default_origin_request_lambda" {
+  type        = bool
+  description = "Use the default origin request lambda for static websites or SPAs"
+  default     = true
 }

@@ -84,3 +84,10 @@ variable "acm_certificate_domain" {
   description = "The domain name that the desired ACM certificate covers (Example: *.example.com)"
   default     = ""
 }
+
+# Lambda
+variable "use_default_origin_request_lambda" {
+  type        = bool
+  description = "Use the default origin request lambda for static websites or SPAs"
+  default     = false
+}
