@@ -24,6 +24,7 @@ This terraform module creates resources that can host an app using AWS Cloudfron
 |`use_acm_certificate`|bool|`true`|Set to `true` to use ACM certificate and `false` to skip and use default cloudfront URL|
 |`route53_zone_id`|string|`""`|Hosted zone ID of the desired Route53 record|
 |`acm_certificate_domain`|string|`""`|The domain name that the desired ACM certificate covers (Example: *.example.com)|
+|`use_default_origin_request_lambda`|bool|`false`|Use the default origin request lambda|
 
 #### cloudfront_response
 ```
@@ -84,7 +85,7 @@ locals {
 }
 
 module "aws_cloudfront_app" {
-  source                 = "git::https://github.com/SSouik/aws-cloudfront-app.git?ref=v1.2.0"
+  source                 = "git::https://github.com/SSouik/aws-cloudfront-app.git?ref=v2.0.0"
   region                 = local.region
   env                    = local.env
   app_name               = local.app_name
