@@ -28,18 +28,6 @@ variable "root_object" {
   default     = "index.html"
 }
 
-variable "index_document" {
-  type        = string
-  description = "The path to the index file"
-  default     = "index.html"
-}
-
-variable "error_document" {
-  type        = string
-  description = "The path to the error document"
-  default     = "index.html"
-}
-
 variable "cloudfront_responses" {
   type = list(object({
     error_code         = number
@@ -51,17 +39,17 @@ variable "cloudfront_responses" {
     {
       error_code         = 404
       response_code      = 404
-      response_page_path = "404.html"
+      response_page_path = "/404.html"
     },
     {
       error_code         = 403
       response_code      = 403
-      response_page_path = "403.html"
+      response_page_path = "/403.html"
     },
     {
       error_code         = 500
       response_code      = 500
-      response_page_path = "500.html"
+      response_page_path = "/500.html"
     }
   ]
 }
@@ -90,4 +78,66 @@ variable "use_default_origin_request_lambda" {
   type        = bool
   description = "Use the default origin request lambda for static websites or SPAs"
   default     = false
+}
+
+# Multiple App Configuration
+variable "default_app_name" {
+  type        = string
+  description = "Name of the app that will be used as the default for cache. (Must match an app in the s3_app_config or app_configs)"
+}
+
+variable "s3_app_configs" {
+  type = map(object({
+    domain_name = string
+    origin_path = string
+    s3_config = object({
+      index_document = string
+      error_document = string
+    })
+    app_config = object({
+      http_port    = number       # Typically 80
+      https_port   = number       # Typically 443
+      protocol     = string       # "http-only", "https-only" or "match-viewer"
+      ssl_protocol = list(string) # "TLSv1", "TLSv1.1", "TLSv1.2", "SSLv3"
+    })
+    cache_behavior = object({
+      path_pattern    = string
+      allowed_methods = list(string)
+      cached_methods  = list(string)
+      forwarded_values = object({
+        query_string = bool
+        cookies      = string
+      })
+    })
+  }))
+  description = "List of configurations for web apps hosted in S3"
+  default     = {}
+}
+
+variable "app_configs" {
+  type = map(object({
+    domain_name = string
+    origin_path = string
+    s3_config = object({
+      index_document = string
+      error_document = string
+    })
+    app_config = object({
+      http_port    = number       # Typically 80
+      https_port   = number       # Typically 443
+      protocol     = string       # "http-only", "https-only" or "match-viewer"
+      ssl_protocol = list(string) # "TLSv1", "TLSv1.1", "TLSv1.2", "SSLv3"
+    })
+    cache_behavior = object({
+      path_pattern    = string
+      allowed_methods = list(string)
+      cached_methods  = list(string)
+      forwarded_values = object({
+        query_string = bool
+        cookies      = string
+      })
+    })
+  }))
+  description = "Configurations for the web apps not hosted in S3"
+  default     = {}
 }

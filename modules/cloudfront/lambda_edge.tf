@@ -3,10 +3,11 @@ locals {
 }
 
 resource "aws_lambda_function" "origin_request" {
+  count         = var.use_default_origin_request_lambda ? 1 : 0
   provider      = aws.east_1
   function_name = local.function_name
   description   = "Cloudfront Lambda@Edge function for the ${var.env}-${var.app_name} origin request"
-  role          = aws_iam_role.lambda_edge_role.arn
+  role          = aws_iam_role.lambda_edge_role[count.index].arn
   filename      = "${path.module}/functions/origin-request/origin-request.zip"
   handler       = "index.handler"
 

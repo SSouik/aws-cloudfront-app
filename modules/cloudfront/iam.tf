@@ -1,6 +1,7 @@
 # S3 bucket is declared here since the cloudfront origin identity needs to be added
 resource "aws_s3_bucket_policy" "s3_bucket_policy" {
-  bucket = var.s3_bucket_id
+  for_each = var.s3_app_configs
+  bucket   = aws_s3_bucket.app_bucket[each.key].id
 
   policy = jsonencode(
     {
@@ -10,10 +11,10 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
           "Sid" : "1",
           "Effect" : "Allow",
           "Principal" : {
-            "AWS" : aws_cloudfront_origin_access_identity.s3_app_origin_access_identity.iam_arn
+            "AWS" : aws_cloudfront_origin_access_identity.s3_app_origin_access_identity[each.key].iam_arn
           },
           "Action" : "s3:GetObject",
-          "Resource" : "arn:aws:s3:::${var.s3_bucket}/*"
+          "Resource" : "arn:aws:s3:::${aws_s3_bucket.app_bucket[each.key].bucket}/*"
         }
       ]
   })
@@ -21,6 +22,7 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
 
 # Lambda Edge Role
 resource "aws_iam_role" "lambda_edge_role" {
+  count    = var.use_default_origin_request_lambda ? 1 : 0
   provider = aws.east_1
   name     = "${var.env}-${var.app_name}-or-role"
 
@@ -58,9 +60,10 @@ resource "aws_iam_role" "lambda_edge_role" {
 }
 
 resource "aws_iam_role_policy" "lambda_edge_role_policy" {
+  count    = var.use_default_origin_request_lambda ? 1 : 0
   provider = aws.east_1
   name     = "${var.env}-${var.app_name}-or-policy"
-  role     = aws_iam_role.lambda_edge_role.id
+  role     = aws_iam_role.lambda_edge_role[count.index].id
 
   policy = jsonencode({
     "Version" : "2012-10-17",
