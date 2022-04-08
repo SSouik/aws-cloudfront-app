@@ -1,0 +1,19 @@
+name: Beta Release
+
+on:
+  push:
+    branches:
+      - 'beta-release'
+    paths-ignore:
+      - 'README.md'
+      - 'bin/**'
+      - '.gitignore'
+      - '.github/**'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create release
+        run: |
+          ./bin/release.sh ${{ secrets.GITHUB_TOKEN }}
