@@ -67,13 +67,6 @@ variable "acm_certificate_domain" {
   default     = ""
 }
 
-# Lambda
-variable "use_default_origin_request_lambda" {
-  type        = bool
-  description = "Use the default origin request lambda for static websites or SPAs"
-  default     = true
-}
-
 # Multiple App Configuration
 variable "default_app_name" {
   type        = string
@@ -102,6 +95,15 @@ variable "s3_app_configs" {
         query_string = bool
         cookies      = string
       })
+      lambdas = list(object({
+        event_type   = string # viewer-request, viewer-response, origin-request, origin-response
+        lambda_arn   = string
+        include_body = bool
+      }))
+      min_ttl                = number
+      default_ttl            = number
+      max_ttl                = number
+      viewer_protocol_policy = string # allow-all, https-only, redirect-to-https
     })
   }))
   description = "List of configurations for web apps hosted in S3"
@@ -130,6 +132,15 @@ variable "app_configs" {
         query_string = bool
         cookies      = string
       })
+      lambdas = list(object({
+        event_type   = string # viewer-request, viewer-response, origin-request, origin-response
+        lambda_arn   = string
+        include_body = bool
+      }))
+      min_ttl                = number
+      default_ttl            = number
+      max_ttl                = number
+      viewer_protocol_policy = string # allow-all, https-only, redirect-to-https
     })
   }))
   description = "Configurations for the web apps not hosted in S3"

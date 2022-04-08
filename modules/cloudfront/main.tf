@@ -20,14 +20,6 @@ locals {
   apps = {
     for k, v in merge(var.s3_app_configs, var.app_configs) : k => v if k != var.default_app_name
   }
-
-  lambda_functions = var.use_default_origin_request_lambda ? [
-    {
-      type : "origin-request"
-      arn : aws_lambda_function.origin_request[0].qualified_arn
-      include_body : false
-    }
-  ] : []
 }
 
 resource "aws_cloudfront_origin_access_identity" "s3_app_origin_access_identity" {
@@ -101,20 +93,20 @@ resource "aws_cloudfront_distribution" "app_distribution" {
     }
 
     dynamic "lambda_function_association" {
-      for_each = local.lambda_functions
+      for_each = local.default_app["cache_behavior"]["lambdas"]
       iterator = lambda_function
 
       content {
-        event_type   = lambda_function.type
+        event_type   = lambda_function.event_type
         lambda_arn   = lambda_function.arn
         include_body = lambda_function.include_body
       }
     }
 
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
-    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = local.default_app["cache_behavior"]["min_ttl"]
+    default_ttl            = local.default_app["cache_behavior"]["default_ttl"]
+    max_ttl                = local.default_app["cache_behavior"]["max_ttl"]
+    viewer_protocol_policy = local.default_app["cache_behavior"]["viewer_protocol_policy"]
   }
 
   dynamic "ordered_cache_behavior" {
@@ -135,20 +127,20 @@ resource "aws_cloudfront_distribution" "app_distribution" {
       }
 
       dynamic "lambda_function_association" {
-        for_each = local.lambda_functions
+        for_each = app.value["cache_behavior"]["lambdas"]
         iterator = lambda_function
 
         content {
-          event_type   = lambda_function.type
+          event_type   = lambda_function.event_type
           lambda_arn   = lambda_function.arn
           include_body = lambda_function.include_body
         }
       }
 
-      min_ttl                = 0
-      default_ttl            = 3600
-      max_ttl                = 86400
-      viewer_protocol_policy = "redirect-to-https"
+      min_ttl                = app.value["cache_behavior"]["min_ttl"]
+      default_ttl            = app.value["cache_behavior"]["default_ttl"]
+      max_ttl                = app.value["cache_behavior"]["max_ttl"]
+      viewer_protocol_policy = app.value["cache_behavior"]["viewer_protocol_policy"]
     }
   }
 
