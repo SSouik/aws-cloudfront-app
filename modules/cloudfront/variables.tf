@@ -1,4 +1,9 @@
 # General Variables
+variable "module_version" {
+  type        = string
+  description = "Module version number. Used in tags"
+}
+
 variable "env" {
   type        = string
   description = "Environment of the Infrastructure"
@@ -80,6 +85,8 @@ variable "s3_app_configs" {
     s3_config = object({
       index_document = string
       error_document = string
+      force_destroy  = bool
+      acl            = string
     })
     app_config = object({
       http_port    = number       # Typically 80
@@ -117,6 +124,8 @@ variable "app_configs" {
     s3_config = object({
       index_document = string
       error_document = string
+      force_destroy  = bool
+      acl            = string
     })
     app_config = object({
       http_port    = number       # Typically 80
