@@ -25,7 +25,7 @@ This terraform module creates resources that can host several apps using AWS Clo
 |`route53_zone_id`|string|`""`|Hosted zone ID of the desired Route53 record|
 |`acm_certificate_domain`|string|`""`|The domain name that the desired ACM certificate covers (Example: *.example.com)|
 |`default_app_name`|string|`""`|Name of the app that will be used as the default for cache. (Must match an app in the s3_app_config or app_configs)|
-|`s3_app_configs`|[app_config](#app_config)|`{}`|List of configurations for web apps hosted in S3|
+|`s3_app_configs`|map([app_config](#app_config))|`{}`|List of configurations for web apps hosted in S3|
 |`app_configs`|map([app_config](#app_config))|`{}`|List of configurations for the web apps not hosted in S3|
 
 #### cloudfront_response

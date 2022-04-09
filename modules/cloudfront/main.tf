@@ -154,13 +154,14 @@ resource "aws_cloudfront_distribution" "app_distribution" {
   }
 
   tags = {
-    AppName     = var.app_name
-    Name        = "${var.env}-${var.app_name}-distribution"
-    Environment = var.env
-    ManagedBy   = "Terraform"
-    Created     = timestamp()
-    CreatedBy   = data.aws_caller_identity.current.arn
-    Module      = "aws-cloudfront-app"
+    AppName       = var.app_name
+    Name          = "${var.env}-${var.app_name}-distribution"
+    Environment   = var.env
+    ManagedBy     = "Terraform"
+    Created       = timestamp()
+    CreatedBy     = data.aws_caller_identity.current.arn
+    Module        = "aws-cloudfront-app"
+    ModuleVersion = var.module_version
   }
 
   viewer_certificate {
