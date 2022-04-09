@@ -2,6 +2,7 @@
 
 module "cloudfront" {
   source                 = "./modules/cloudfront"
+  module_version         = "2.0.0"
   app_name               = var.app_name
   env                    = var.env
   domain_name            = var.domain_name
