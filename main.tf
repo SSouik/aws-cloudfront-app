@@ -1,8 +1,11 @@
 # Terraform module for creating infrastructure to host an app using AWS Cloudfront
+locals {
+  module_version = jsondecode(file("${path.module}/version.json")).version
+}
 
 module "cloudfront" {
   source                 = "./modules/cloudfront"
-  module_version         = "2.0.0"
+  module_version         = local.module_version
   app_name               = var.app_name
   env                    = var.env
   domain_name            = var.domain_name
