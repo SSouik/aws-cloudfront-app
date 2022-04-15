@@ -5,102 +5,20 @@ This terraform module creates resources that can host several apps using AWS Clo
 <br/>
 
 ## Table of Contents
-* [Module Inputs](#module-inputs)
 * [How to Use](#how-to-use)
+* [Module Inputs](#module-inputs)
 
 <br/>
 
-### Module Inputs
-|Name|Type|Default|Description|
-:--:|:--:|:--:|:--|
-|`region`|string|`us-east-1`|Qualifying AWS region (Example: us-east-2)|
-|`env`|string|`dev`|Environment of the Infrastructure|
-|`app_name`|string|`null`|The name of the application|
-|`domain_name`|string|`null`|The domain name that the app will use|
-|`root_object`|string|`index.html`|The path to the root object/file|
-|`index_document`|string|`index.html`|The path to the index file|
-|`error_document`|string|`index.html`|The path to the error document|
-|`cloudfront_responses`|list(object([cloudfront_response](#cloudfront_response)))|[cloudfront_response_default](#cloudfront_response_default)|List of custom Cloudfront responses|
-|`use_acm_certificate`|bool|`true`|Set to `true` to use ACM certificate and `false` to skip and use default cloudfront URL|
-|`route53_zone_id`|string|`""`|Hosted zone ID of the desired Route53 record|
-|`acm_certificate_domain`|string|`""`|The domain name that the desired ACM certificate covers (Example: *.example.com)|
-|`default_app_name`|string|`""`|Name of the app that will be used as the default for cache. (Must match an app in the s3_app_config or app_configs)|
-|`s3_app_configs`|map([app_config](#app_config))|`{}`|List of configurations for web apps hosted in S3|
-|`app_configs`|map([app_config](#app_config))|`{}`|List of configurations for the web apps not hosted in S3|
-
-#### cloudfront_response
-```go
-{
-    error_code         = number
-    response_code      = number
-    response_page_path = string
-}
-```
-
-#### cloudfront_response_default
-```terraform
-[
-    {
-      error_code         = 404
-      response_code      = 404
-      response_page_path = "404.html"
-    },
-    {
-      error_code         = 403
-      response_code      = 403
-      response_page_path = "403.html"
-    },
-    {
-      error_code         = 500
-      response_code      = 500
-      response_page_path = "500.html"
-    }
-]
-```
-
-#### app_config
-```terraform
-{
-    domain_name = string
-    origin_path = string
-    s3_config = {
-        index_document = string
-        error_document = string
-        force_destroy  = bool
-        acl            = string
-    }
-    app_config = {
-        http_port = number
-        https_port = number
-        protocol = string # "http-only", "https-only" or "match-viewer"
-        ssl_protocol = list(string) # "TLSv1", "TLSv1.1", "TLSv1.2", "SSLv3"
-    }
-    cache_behavior = {
-        path_pattern = string
-        allowed_methods = list(string)
-        cached_methods = list(string)
-        forwarded_values = {
-            query_string = bool
-            cookies = string
-        }
-        lambdas = list({
-            event_type = string # viewer-request, viewer-response, origin-request, origin-response
-            lambda_arn = string
-            include_body = bool
-        })
-        min_ttl = number
-        default_ttl = number
-        max_ttl = number
-        viewer_protocol_policy = string
-    }
-}
-```
-<br/>
 
 ### How to Use
-The Terraform module is public and free to use and with that, no GitHub token or special access is needed to use it. Below is a simple example of how it can be used.
+Module `source`
+```
+git::https://github.com/SSouik/aws-cloudfront-app.git?ref=v2.1.0
+```
 
-```terraform
+Setup and configuration sample
+```
 # main.tf
 locals {
     region         = "us-east-1"
@@ -180,7 +98,7 @@ locals {
 }
 
 module "aws_cloudfront_app" {
-  source                 = "git::https://github.com/SSouik/aws-cloudfront-app.git?ref=v2.0.0"
+  source                 = "git::https://github.com/SSouik/aws-cloudfront-app.git?ref=v2.1.0"
   region                 = local.region
   env                    = local.env
   app_name               = local.app_name
@@ -194,3 +112,90 @@ module "aws_cloudfront_app" {
   app_configs            = local.app_configs
 }
 ```
+
+### Module Inputs
+|Name|Required|Type|Default|Description|
+:--|:--:|:--:|:--:|:--|
+|`region`|No|string|`us-east-1`|Qualifying AWS region (Example: us-east-2)|
+|`env`|No|string|`dev`|Environment of the Infrastructure|
+|`app_name`|Yes|string||The name of the application|
+|`domain_name`|Yes|string||The domain name that the app will use|
+|`root_object`|No|string|`index.html`|The path to the root object/file|
+|`cloudfront_responses`|No|list(object([cloudfront_response](#cloudfront_response)))|[cloudfront_response_default](#cloudfront_response_default)|List of custom Cloudfront responses|
+|`use_acm_certificate`|No|bool|`true`|Set to `true` to use ACM certificate and `false` to skip and use default cloudfront URL|
+|`route53_zone_id`|No|string|`""`|Hosted zone ID of the desired Route53 record|
+|`acm_certificate_domain`|No|string|`""`|The domain name that the desired ACM certificate covers (Example: *.example.com)|
+|`default_app_name`|Yes|string||Name of the app that will be used as the default for cache. (Must match an app in the s3_app_config or app_configs)|
+|`s3_app_configs`|No|map([app_config](#app_config))|`{}`|List of configurations for web apps hosted in S3|
+|`app_configs`|No|map([app_config](#app_config))|`{}`|List of configurations for the web apps not hosted in S3|
+
+> Either `s3_app_configs` or `app_configs` needs to be defined
+
+#### cloudfront_response
+```go
+{
+    error_code         = number
+    response_code      = number
+    response_page_path = string
+}
+```
+
+#### cloudfront_response_default
+```terraform
+[
+    {
+      error_code         = 404
+      response_code      = 404
+      response_page_path = "404.html"
+    },
+    {
+      error_code         = 403
+      response_code      = 403
+      response_page_path = "403.html"
+    },
+    {
+      error_code         = 500
+      response_code      = 500
+      response_page_path = "500.html"
+    }
+]
+```
+
+#### app_config
+```terraform
+{
+    domain_name = string
+    origin_path = string
+    s3_config = {
+        index_document = string
+        error_document = string
+        force_destroy  = bool
+        acl            = string
+    }
+    app_config = {
+        http_port = number
+        https_port = number
+        protocol = string # "http-only", "https-only" or "match-viewer"
+        ssl_protocol = list(string) # "TLSv1", "TLSv1.1", "TLSv1.2", "SSLv3"
+    }
+    cache_behavior = {
+        path_pattern = string
+        allowed_methods = list(string)
+        cached_methods = list(string)
+        forwarded_values = {
+            query_string = bool
+            cookies = string
+        }
+        lambdas = list({
+            event_type = string # viewer-request, viewer-response, origin-request, origin-response
+            lambda_arn = string
+            include_body = bool
+        })
+        min_ttl = number
+        default_ttl = number
+        max_ttl = number
+        viewer_protocol_policy = string
+    }
+}
+```
+<br/>
