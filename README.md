@@ -7,6 +7,7 @@ This terraform module creates resources that can host several apps using AWS Clo
 ## Table of Contents
 * [How to Use](#how-to-use)
 * [Module Inputs](#module-inputs)
+* [Module Outputs](#module-outputs)
 
 <br/>
 
@@ -199,3 +200,11 @@ module "aws_cloudfront_app" {
 }
 ```
 <br/>
+
+### Module Outputs
+|Name|Description|
+|:--|:--|
+|`cloudfront_distribution_id`|The ID of the created CloudFront Distribution|
+|`cloudfront_distribution_arn`|The ARN of the created CloudFront Distribution|
+|`cloudfront_distribution_domain`|The domain name of the created CloudFront Distribution|
+|`cloudfront_distribution_hosted_zone_id`|The Hosted Zone ID of the created CloudFront Distribution|
