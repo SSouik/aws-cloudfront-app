@@ -12,8 +12,13 @@ on:
 jobs:
   version-check:
     runs-on: ubuntu-latest
+    container:
+      image: ssouik/ubuntu-git:latest
     steps:
       - uses: actions/checkout@v2
       - name: Check Version
         run: |
-          ./bin/version_check.sh
+          version-check \
+            --file version.json \
+            --org SSouik \
+            --repo aws-cloudfront-app
