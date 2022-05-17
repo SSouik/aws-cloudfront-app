@@ -5,6 +5,22 @@ on:
     branches:
       - 'main'
 jobs:
+  commit-lint:
+    runs-on: ubuntu-latest
+    container:
+      image: ssouik/ubuntu-git:latest
+    steps:
+      - name: Checkout code
+        run: |
+          git clone https://github.com/SSouik/aws-cloudfront-app.git code
+          cd code
+          git fetch
+          git checkout ${GITHUB_HEAD_REF}
+      - name: Lint pull request commits
+        run: |
+          cd code
+          commit-lint --pull-request
+
   validate:
     runs-on: ubuntu-latest
     steps:
